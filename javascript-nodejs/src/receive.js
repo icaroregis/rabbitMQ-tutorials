@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// Programas para enviar e receber mensagens de uma fila nomeada
 var amqp = require('amqplib/callback_api');
 
 amqp.connect('amqp://localhost', function (error0, connection) {

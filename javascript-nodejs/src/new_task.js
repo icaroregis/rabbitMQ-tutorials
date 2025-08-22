@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// Programas para enviar e receber mensagens de uma fila nomeada
 var amqp = require('amqplib/callback_api');
 
 amqp.connect('amqp://localhost', function (error0, connection) {
@@ -10,16 +9,16 @@ amqp.connect('amqp://localhost', function (error0, connection) {
     if (error1) {
       throw error1;
     }
-
-    var queue = 'hello';
-    var msg = 'Hello World!';
+    var queue = 'task_queue';
+    var msg = process.argv.slice(2).join(' ') || 'Hello World!';
 
     channel.assertQueue(queue, {
-      durable: false, // Fila não persistente
+      durable: true, // Fila persistente
     });
-    channel.sendToQueue(queue, Buffer.from(msg));
-
-    console.log(' [x] Sent %s', msg);
+    channel.sendToQueue(queue, Buffer.from(msg), {
+      persistent: true, // Mensagem persistente
+    });
+    console.log(" [x] Sent '%s'", msg);
   });
   setTimeout(function () {
     connection.close();
