@@ -7,18 +7,18 @@ function sendMultipleTasks() {
     if (error0) {
       throw error0;
     }
-    
+
     connection.createChannel(function (error1, channel) {
       if (error1) {
         throw error1;
       }
-      
+
       const queue = 'task_queue';
-      
+
       channel.assertQueue(queue, {
-        durable: true,
+        durable: true, // Fila persistente
       });
-      
+
       // Lista de tarefas para enviar
       const tasks = [
         'Tarefa rápida.',
@@ -27,20 +27,20 @@ function sendMultipleTasks() {
         'Tarefa simples.',
         'Tarefa complexa.....',
         'Tarefa normal..',
-        'Tarefa final.'
+        'Tarefa final.',
       ];
-      
+
       let taskIndex = 0;
-      
+
       // Enviar uma tarefa a cada segundo
       const interval = setInterval(() => {
         if (taskIndex < tasks.length) {
           const task = tasks[taskIndex];
-          
+
           channel.sendToQueue(queue, Buffer.from(task), {
-            persistent: true,
+            persistent: true, // Mensagem persistente
           });
-          
+
           console.log(`📤 Enviou tarefa ${taskIndex + 1}: "${task}"`);
           taskIndex++;
         } else {

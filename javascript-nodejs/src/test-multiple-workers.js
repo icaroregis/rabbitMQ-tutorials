@@ -8,31 +8,31 @@ function createWorker(workerId) {
     if (error) {
       throw error;
     }
-    
+
     connection.createChannel(function (error, channel) {
       if (error) {
         throw error;
       }
-      
+
       var queue = 'task_queue';
 
       channel.assertQueue(queue, {
         durable: true, // fila persistente
       });
-      
+
       // Configuração importante: prefetch(1) garante distribuição justa
       channel.prefetch(1);
-      
+
       console.log(`🔴 Worker ${workerId} - Aguardando mensagens...`);
-      
+
       channel.consume(
         queue,
         function (msg) {
           var task = msg.content.toString();
           var processingTime = task.split('.').length - 1; // Simula tempo baseado em pontos
-          
+
           console.log(`📥 Worker ${workerId} - Recebeu: "${task}"`);
-          
+
           // Simula processamento
           setTimeout(function () {
             console.log(`✅ Worker ${workerId} - Concluiu: "${task}"`);
@@ -41,7 +41,7 @@ function createWorker(workerId) {
         },
         {
           noAck: false, // Requer acknowledgment
-        }
+        },
       );
     });
   });
