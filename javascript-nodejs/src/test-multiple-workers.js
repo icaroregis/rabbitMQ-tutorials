@@ -17,7 +17,7 @@ function createWorker(workerId) {
       var queue = 'task_queue';
 
       channel.assertQueue(queue, {
-        durable: true,
+        durable: true, // fila persistente
       });
       
       // Configuração importante: prefetch(1) garante distribuição justa
